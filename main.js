@@ -26,6 +26,33 @@ const pies = [
     owner: 'Matt',
     aLaMode: false
   },
+  {
+    type: 'Meat Pie',
+    size: 'Real Big',
+    crust: 'Meat Crust',
+    price: 1,
+    imageUrl: 'https://culinaryginger.com/wp-content/uploads/Minced-Beef-and-Onion-Pies-10-480x480.jpg',
+    owner: 'Luke',
+    aLaMode: true
+  },
+  {
+    type: 'Pizza Pie',
+    size: 'XL',
+    crust: 'regular',
+    price: 6,
+    imageUrl: 'https://themercenaryresearcher.files.wordpress.com/2012/07/ginormous-pizza.jpg',
+    owner: 'Michael',
+    aLaMode: true
+  },
+  {
+    type: 'Rhubarb',
+    size: 'Pie Sized',
+    crust: 'Normal',
+    price: 2147483647,
+    imageUrl: 'https://assets.kraftfoods.com/recipe_images/opendeploy/54036_640x428.jpg',
+    owner: 'Matt',
+    aLaMode: true
+  },
 ];
 
 const printToDom = (selector, textToPrint) => {
@@ -37,11 +64,13 @@ const buildPies = (pieCollection) => {
   let domString = '';
 
   for (let i = 0; i < pieCollection.length; i++) {
+    const aLaModeText = (pieCollection[i].aLaMode) ? 'with Ice Cream' : 'without Ice Cream';
+
     domString += `
       <div class="pie">
         <h2>${pieCollection[i].type}</h2>
         <img src="${pieCollection[i].imageUrl}" alt="image of ${pieCollection[i].type} pie">
-        <p>This ${pieCollection[i].type} pie is a ${pieCollection[i].size} pie, it's owned by ${pieCollection[i].owner}, and has a ${pieCollection[i].crust} crust.</p>
+        <p>This ${pieCollection[i].type} pie is a ${pieCollection[i].size} pie, it's owned by ${pieCollection[i].owner}, and has a ${pieCollection[i].crust} crust and is served ${aLaModeText}.</p>
         <h4>Price: ${pieCollection[i].price}</h4>
       </div>
     `;
@@ -50,8 +79,35 @@ const buildPies = (pieCollection) => {
   printToDom('#pieContainer', domString);
 }
 
+const filterPiesEvent = (event) => {
+  const buttonID = event.target.id;
+  const tempPieCollection = [];
+
+  if (buttonID === 'all') {
+    buildPies(pies);
+    return;
+  }
+
+  for (let i = 0; i < pies.length; i++) {
+    if (pies[i].owner === buttonID) {
+      tempPieCollection.push(pies[i]);
+    }
+  }
+
+  buildPies(tempPieCollection);
+}
+
+
+const clickEvents = () => {
+  document.querySelector('#Luke').addEventListener('click', filterPiesEvent);
+  document.querySelector('#Michael').addEventListener('click', filterPiesEvent);
+  document.querySelector('#Matt').addEventListener('click', filterPiesEvent);
+  document.querySelector('#all').addEventListener('click', filterPiesEvent)
+}
+
 const init = () => {
   buildPies(pies);
+  clickEvents();
 }
 
 init();
